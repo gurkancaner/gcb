@@ -110,26 +110,26 @@ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga
 	<header class="entry-header">
 			<h1 class="entry-title"><a href="/rediska-instance-problem/" rel="bookmark">Rediska Instance Problem</a></h1>		</header><!-- .entry-header -->
 				<div class="entry-meta">
-						<span class="posted-on"><a href="/rediska-instance-problem/" rel="bookmark"><time class="entry-date published" datetime="2011-12-27T14:59:33+00:00">December 27, 2011</time><time class="updated" datetime="2015-08-27T15:00:43+00:00">August 27, 2015</time></a></span><span class="byline"><span class="sep"> ~ </span><span class="author vcard"><a class="url fn n" href="/author/gurkancaner/">gurkancaner</a></span></span>								</div><!-- .entry-meta -->
+						<span class="posted-on"><a href="/rediska-instance-problem/" rel="bookmark"><time class="entry-date published" datetime="2011-12-27T14:59:33+00:00">December 27, 2011</time><time class="updated" datetime="2015-08-27T16:02:44+00:00">August 27, 2015</time></a></span><span class="byline"><span class="sep"> ~ </span><span class="author vcard"><a class="url fn n" href="/author/gurkancaner/">gurkancaner</a></span></span>								</div><!-- .entry-meta -->
 				<div class="entry-content">
 		<p>I am building a task module, to do time consuming jobs in background. A worker instance is constantly pooling redis db for a new task. However after first connection, somehow rediska (a php redis client) closes connection, and when I make query to db, it automatically creates a new connection using default settings. At this point new connection is not using the settings in the configuration. It is using hard coded default values. I don&#8217;t know why it is doing this but here is the solution.</p>
-<p>Whenever you use a rediska key, explicitly tell the instance name you want to use.</p>
-<pre class="wp-code-highlight prettyprint">$option = array(&quot;rediska&quot;=&amp;gt;&quot;use_this_instance_name&quot;);
-$pointer = new Rediska_Key(&quot;job:$index:pointer&quot;,$option);
-</pre>
-<p>To define aforementioned rediska instance:</p>
+<p>Whenever you use a rediska key, explicitly tell the instance name you want to use.<br />
+<code>$option = array("rediska"=>"use_this_instance_name");<br />
+$pointer = new Rediska_Key("job:$index:pointer",$option);<br />
+</code><br />
+To define aforementioned rediska instance:</p>
 <pre class="wp-code-highlight prettyprint">$options = array (
-                    &#039;addToManager&#039; =&amp;gt; true,
-                    &#039;name&#039;         =&amp;gt; &quot;use_this_instance_name&quot;,
-                    &#039;namespace&#039;    =&amp;gt; &#039;&#039;,
-                    &#039;servers&#039;      =&amp;gt; array(
+                    &#039;addToManager&#039; =&gt; true,
+                    &#039;name&#039;         =&gt; &quot;use_this_instance_name&quot;,
+                    &#039;namespace&#039;    =&gt; &#039;&#039;,
+                    &#039;servers&#039;      =&gt; array(
                         array(
-                            &#039;host&#039;   =&amp;gt; Rediska_Connection::DEFAULT_HOST,
-                            &#039;port&#039;   =&amp;gt; Rediska_Connection::DEFAULT_PORT,
-                            &#039;weight&#039; =&amp;gt; Rediska_Connection::DEFAULT_WEIGHT,
-                            &#039;db&#039;=&amp;gt;2,
-                            &#039;persistent&#039;=&amp;gt;TRUE,
-                            &#039;timeout&#039;=&amp;gt;0
+                            &#039;host&#039;   =&gt; Rediska_Connection::DEFAULT_HOST,
+                            &#039;port&#039;   =&gt; Rediska_Connection::DEFAULT_PORT,
+                            &#039;weight&#039; =&gt; Rediska_Connection::DEFAULT_WEIGHT,
+                            &#039;db&#039;=&gt;2,
+                            &#039;persistent&#039;=&gt;TRUE,
+                            &#039;timeout&#039;=&gt;0
                             
                         )
                     )  
